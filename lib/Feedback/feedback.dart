@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:mental_health/l10n/languageProvider.dart';
 import 'package:mental_health/widget/Appcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EmailFormScreen extends StatefulWidget {
   @override
@@ -41,8 +44,22 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
     super.dispose();
   }
 
+  String _currentLanguage = 'en';
+  @override
+  void initState() {
+    super.initState();
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    final prefs = await SharedPreferences.getInstance();
+    _currentLanguage = prefs.getString('language_code') ?? 'en';
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
@@ -50,7 +67,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
           elevation: 0,
           backgroundColor: AppColors.ecogreen,
           title: Text(
-            'Send Email',
+            languageProvider.translate('Send Email'),
             style: TextStyle(
               fontFamily: 'SourceSansPro',
               color: AppColors.white,

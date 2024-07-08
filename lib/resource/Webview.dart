@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mental_health/l10n/languageProvider.dart';
 import 'package:mental_health/widget/Appcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewScreen extends StatefulWidget {
@@ -19,10 +22,19 @@ class _WebViewScreenState extends State<WebViewScreen> {
     super.initState();
     // Enable hybrid composition for Android
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    _initializeApp();
+  }
+  String _currentLanguage = 'en';
+
+  Future<void> _initializeApp() async {
+    final prefs = await SharedPreferences.getInstance();
+    _currentLanguage = prefs.getString('language_code') ?? 'en';
+
   }
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
@@ -30,7 +42,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
           elevation: 0,
           backgroundColor: AppColors.ecogreen,
           title: Text(
-            'Webview',
+            languageProvider.translate('Webview'),
             style: TextStyle(
               fontFamily: 'SourceSansPro',
               color: AppColors.white,

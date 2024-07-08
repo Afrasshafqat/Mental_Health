@@ -40,156 +40,156 @@ class _LogInScreenState extends State<LogInScreen> {
       resizeToAvoidBottomInset: false, // set it to false
       body: _isloading
           ? Center(
-              child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor),
-            )
+        child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor),
+      )
           : SingleChildScrollView(
-              child: Form(
-                key: formkey,
+        child: Form(
+          key: formkey,
+          child: Column(
+            children: [
+              Container(
+                height: 290,
+                decoration: BoxDecoration(
+                  color: AppColors.ecogreen,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.elliptical(90, 50),
+                    bottomRight: Radius.elliptical(90, 50),
+                  ),
+                ),
+                child: Center(
+                  child: Image.asset(
+                    "assets/images/logo.jpeg",
+                    width: 150.0,  // Set your desired width
+                    height: 150.0,  // Set your desired height
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 50,),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 12, 30, 8),
                 child: Column(
                   children: [
-                    Container(
-                      height: 290,
-                      decoration: BoxDecoration(
-                        color: AppColors.ecogreen,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.elliptical(90, 50),
-                          bottomRight: Radius.elliptical(90, 50),
+                    TextFormField(
+                      decoration: textinputDecoration.copyWith(
+                        labelText: "Email",
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color:AppColors.ecogreen,
                         ),
                       ),
-                      child: Center(
-                        child: Image.asset(
-                          "assets/images/logo.jpeg",
-                          width: 150.0,  // Set your desired width
-                          height: 150.0,  // Set your desired height
-                          fit: BoxFit.contain,
+                      onChanged: (val) {
+                        setState(() {
+                          email = val;
+                        });
+                      },
+                      validator: (val) {
+                        return RegExp(
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(val!)
+                            ? null
+                            : "Please enter a valid email";
+                      },
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      obscureText: true,
+                      decoration: textinputDecoration.copyWith(
+                        labelText: "Password",
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          color:AppColors.ecogreen,
                         ),
+                      ),
+                      validator: (val) {
+
+                        if (val!.length < 6) {
+                          return RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(val)
+                              ? null
+                              : "Please enter a valid passward with Regular Expression";
+                        }
+                        else {
+                          return null;
+                        }
+                      },
+                      onChanged: (val) {
+                        setState(() {
+                          password = val;
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary:AppColors.ecogreen,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
+                        child: const Text(
+                          "Sign In",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        onPressed: () {
+                          login();
+                        },
                       ),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text.rich(
+                      TextSpan(
+                          text: "Don't have an account? ",
+                          style: TextStyle(
+                              fontFamily: 'Nunito',
+                              fontSize: 14,
+                              color: Colors.black
 
-                    SizedBox(height: 50,),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 12, 30, 8),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            decoration: textinputDecoration.copyWith(
-                              labelText: "Email",
-                              prefixIcon: Icon(
-                                Icons.email,
-                                color:AppColors.ecogreen,
-                              ),
-                            ),
-                            onChanged: (val) {
-                              setState(() {
-                                email = val;
-                              });
-                            },
-                            validator: (val) {
-                              return RegExp(
-                                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                      .hasMatch(val!)
-                                  ? null
-                                  : "Please enter a valid email";
-                            },
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          TextFormField(
-                            obscureText: true,
-                            decoration: textinputDecoration.copyWith(
-                              labelText: "Password",
-                              prefixIcon: Icon(
-                                Icons.lock,
-                                color:AppColors.ecogreen,
-                              ),
-                            ),
-                            validator: (val) {
-
-                              if (val!.length < 6) {
-                                return RegExp(
-                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                    .hasMatch(val)
-                                    ? null
-                                    : "Please enter a valid passward with Regular Expression";
-                              }
-                              else {
-                                return null;
-                              }
-                            },
-                            onChanged: (val) {
-                              setState(() {
-                                password = val;
-                              });
-                            },
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary:AppColors.ecogreen,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                              ),
-                              child: const Text(
-                                "Sign In",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              onPressed: () {
-                                login();
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text.rich(
+                          children: <TextSpan>[
                             TextSpan(
-                                text: "Don't have an account? ",
-                                style: TextStyle(
+                                text: "Register here",
+                                style: const TextStyle(
+                                  color: Colors.black,
                                   fontFamily: 'Nunito',
-                                  fontSize: 14,
-                                  color: Colors.black
-
+                                  decoration: TextDecoration.underline,
                                 ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: "Register here",
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'Nunito',
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () => nextScreen(
-                                            context, const RegisterScreen())),
-                                ]),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            onTap: (){
-                              //Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()),);
-                            },
-                              child: Text("Forget Password")),
-                        ],
-                      ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () => nextScreen(
+                                      context, const RegisterScreen())),
+                          ]),
                     ),
-
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                        onTap: (){
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()),);
+                        },
+                        child: Text("Forget Password")),
                   ],
                 ),
               ),
-            ),
+
+            ],
+          ),
+        ),
+      ),
     );
   }
   login() async {
@@ -217,23 +217,23 @@ class _LogInScreenState extends State<LogInScreen> {
         await HelperFunction.saveUserEmail(email);
         await HelperFunction.saveUserNameSp(name);
 
-          if (FirebaseAuth.instance.currentUser!.emailVerified) {
-            final firebaseuser = FirebaseAuth.instance.currentUser!.uid;
-            await FirebaseFirestore.instance
-                .collection("users")
-                .doc(firebaseuser)
-                .get()
-                .then((value) {
-                  nextScreenReplace(context, const Dashboard());
+        if (FirebaseAuth.instance.currentUser!.emailVerified) {
+          final firebaseuser = FirebaseAuth.instance.currentUser!.uid;
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(firebaseuser)
+              .get()
+              .then((value) {
+            nextScreenReplace(context, const Dashboard());
 
-            });
-          } else {
-            nextScreen(
-              context,
+          });
+        } else {
+          nextScreen(
+            context,
 
-              const Dashboard(),
+            const Dashboard(),
 
-            );
+          );
 
         }
       } else {

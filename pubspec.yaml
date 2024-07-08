@@ -46,7 +46,10 @@ dependencies:
   percent_indicator: ^4.2.3
   webview_flutter: ^3.0.0
   flutter_email_sender:
-
+  provider:
+  intl:
+  flutter_localizations:
+    sdk: flutter
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -72,6 +75,11 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/
+    - lib/l10n/
+    - assets/i18n/ur.json
+    - assets/i18n/en.json
+
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

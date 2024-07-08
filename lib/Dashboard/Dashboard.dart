@@ -5,8 +5,11 @@ import 'package:mental_health/Assessment/Assessment.dart';
 import 'package:mental_health/Auth/login_screen.dart';
 import 'package:mental_health/Feedback/feedback.dart';
 import 'package:mental_health/Setting/SettingScreen.dart';
+import 'package:mental_health/l10n/languageProvider.dart';
 import 'package:mental_health/resource/library.dart';
 import 'package:mental_health/widget/Appcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -16,16 +19,32 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+
+  String _currentLanguage = 'en';
+  @override
+  void initState() {
+    super.initState();
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    final prefs = await SharedPreferences.getInstance();
+    _currentLanguage = prefs.getString('language_code') ?? 'en';
+
+  }
+
+
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppColors.solightblue,
       appBar: AppBar(
-          backgroundColor:AppColors.ecogreen,
+        backgroundColor:AppColors.ecogreen,
         title: Text(
-          'Home Screen',
+          languageProvider.translate('app_title'),
           style: TextStyle(
             fontFamily: 'SourceSansPro',
             color: AppColors.white,
@@ -49,9 +68,9 @@ class _DashboardState extends State<Dashboard> {
                     Container(
                       width: 80,
                       height: 80,
-                  child: Image.asset(
-                      "assets/images/logo.jpeg",
-                    ),
+                      child: Image.asset(
+                        "assets/images/logo.jpeg",
+                      ),
                     ),
                   ],
                 ),
@@ -65,7 +84,9 @@ class _DashboardState extends State<Dashboard> {
               },
               child: ListTile(
                 leading: Icon(Icons.person,color: AppColors.ecogreen,),
-                title: Text("Profile",style: TextStyle(fontSize: 15, fontFamily: 'Nunito'),),
+                title: Text(
+                  languageProvider.translate('Profile')
+                  ,style: TextStyle(fontSize: 15, fontFamily: 'Nunito'),),
               ),
             ),
 
@@ -90,7 +111,72 @@ class _DashboardState extends State<Dashboard> {
               },
               child: ListTile(
                 leading: Icon(Icons.exit_to_app,color: AppColors.ecogreen,),
-                title: Text("Logout",style: TextStyle(fontSize: 15, fontFamily: 'Nunito'),),
+                title: Text(
+                  languageProvider.translate('Logout'),
+                  style: TextStyle(fontSize: 15, fontFamily: 'Nunito'),),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    languageProvider.translate('language_change_btn'),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+
+
+                  ListTile(
+                    leading: const Padding(
+                      padding:  EdgeInsets.all(2.0),
+                      child: Icon(Icons.translate_outlined,color: Colors.grey,),
+                    ),
+                    title: Text( languageProvider.translate('language'),
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.bold,
+
+                      ),),
+                    trailing: DropdownButton<String>(
+                      style: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                      dropdownColor: Colors.grey,
+
+                      value: _currentLanguage,
+                      items: const [
+
+                        DropdownMenuItem(
+                          value: 'en',
+                          child: Text('English',
+                            style: TextStyle(
+                                color: Colors.white
+                            ),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 'ur',
+                          child: Text('Urdu',
+                            style: TextStyle(
+                                color: Colors.white
+                            ),),
+                        ),
+                      ],
+                      onChanged: (value) async {
+                        languageProvider.changeLanguage(value!);
+                        setState(() {
+                          _currentLanguage = value!;
+                        });
+                        // await _onRefresh();
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -130,8 +216,8 @@ class _DashboardState extends State<Dashboard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    width: 150,
-                    height: 150,
+                      width: 150,
+                      height: 150,
                       child: Image.asset(
                         "assets/images/logo.jpeg",
                       )
@@ -154,7 +240,7 @@ class _DashboardState extends State<Dashboard> {
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: 2,
-                      childAspectRatio: .95,
+                      childAspectRatio: .90,
                       crossAxisSpacing: 50,
                       mainAxisSpacing: 10,
                       children: <Widget>[
@@ -167,7 +253,7 @@ class _DashboardState extends State<Dashboard> {
 
                           ),
                           child: MaterialButton(onPressed: () {
-                             Navigator.push(context, MaterialPageRoute(builder: (context)=>Assessment()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Assessment()));
                           },
                             child: Padding(
                               padding: const EdgeInsets.all(20.0),
@@ -178,9 +264,9 @@ class _DashboardState extends State<Dashboard> {
                                     child: Image.asset("assets/images/satisfaction.png"),
                                   ),
                                   Spacer(),
-                                  Text("Assessment",
+                                  Text(languageProvider.translate('assessment'),
                                     style: new TextStyle(
-                                        fontSize: 15.0,
+                                        fontSize: 13.0,
                                         fontWeight: FontWeight.bold,
                                         fontFamily: 'Nunito'
                                     ),
@@ -200,10 +286,10 @@ class _DashboardState extends State<Dashboard> {
 
                           ),
                           child: MaterialButton(onPressed: () {
-                             Navigator.push(context, MaterialPageRoute(builder: (context)=>LibararyScreen()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>LibararyScreen()));
                           },
                             child: Padding(
-                              padding: const EdgeInsets.all(20.0),
+                              padding: const EdgeInsets.all(16.0),
                               child: Column(
                                 children: [
                                   Padding(
@@ -211,9 +297,9 @@ class _DashboardState extends State<Dashboard> {
                                     child: Image.asset("assets/images/library.png"),
                                   ),
                                   Spacer(),
-                                  Text("Resource library",
+                                  Text(languageProvider.translate('resource_library'),
                                     style: new TextStyle(
-                                        fontSize: 15.0,
+                                        fontSize: 13.0,
                                         fontWeight: FontWeight.bold,
                                         fontFamily: 'Nunito'
                                     ),
@@ -233,7 +319,7 @@ class _DashboardState extends State<Dashboard> {
 
                           ),
                           child: MaterialButton(onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>EmailFormScreen()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>EmailFormScreen()));
                           },
                             child: Padding(
                               padding: const EdgeInsets.all(20.0),
@@ -244,9 +330,9 @@ class _DashboardState extends State<Dashboard> {
                                     child: Image.asset("assets/images/chat.png"),
                                   ),
                                   Spacer(),
-                                  Text("Feedback",
+                                  Text(languageProvider.translate('feedback'),
                                     style: new TextStyle(
-                                        fontSize: 15.0,
+                                        fontSize: 13.0,
                                         fontWeight: FontWeight.bold,
                                         fontFamily: 'Nunito'
                                     ),
@@ -265,10 +351,10 @@ class _DashboardState extends State<Dashboard> {
 
                           ),
                           child: MaterialButton(onPressed: () {
-                             Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingsScreen()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingsScreen()));
                           },
                             child: Padding(
-                              padding: const EdgeInsets.all(20.0),
+                              padding: const EdgeInsets.all(16.0),
                               child: Column(
                                 children: [
                                   Padding(
@@ -276,7 +362,7 @@ class _DashboardState extends State<Dashboard> {
                                     child: Image.asset("assets/images/settings.png"),
                                   ),
                                   Spacer(),
-                                  Text("Setting",
+                                  Text( languageProvider.translate('setting'),
                                     style: new TextStyle(
                                         fontSize: 13.0,
                                         fontWeight: FontWeight.bold,
@@ -307,7 +393,7 @@ class _DashboardState extends State<Dashboard> {
                                     child: Image.asset("assets/images/helpdesk.png"),
                                   ),
                                   Spacer(),
-                                  Text("Help & Support",
+                                  Text(languageProvider.translate('Help_&_Support'),
                                     style: new TextStyle(
                                         fontSize: 13.0,
                                         fontWeight: FontWeight.bold,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mental_health/l10n/languageProvider.dart';
 import 'package:mental_health/widget/Appcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -20,6 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void initState() {
     super.initState();
     fetchUserProfile();
+    _initializeApp();
   }
 
   Future<void> fetchUserProfile() async {
@@ -34,12 +38,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
       });
     }
   }
+  String _currentLanguage = 'en';
+
+  Future<void> _initializeApp() async {
+    final prefs = await SharedPreferences.getInstance();
+    _currentLanguage = prefs.getString('language_code') ?? 'en';
+
+  }
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(
+            languageProvider.translate('setting'),),
         backgroundColor:AppColors.ecogreen,
         elevation: 0,
       ),
