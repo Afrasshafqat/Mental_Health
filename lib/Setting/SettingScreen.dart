@@ -160,8 +160,4 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: SettingsScreen(),
-  ));
-}
+

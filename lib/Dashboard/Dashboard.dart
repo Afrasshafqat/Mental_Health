@@ -80,7 +80,7 @@ class _DashboardState extends State<Dashboard> {
             SizedBox(height: 12.0,),
             GestureDetector(
               onTap: (){
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingsScreen()));
               },
               child: ListTile(
                 leading: Icon(Icons.person,color: AppColors.ecogreen,),
@@ -123,7 +123,7 @@ class _DashboardState extends State<Dashboard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    languageProvider.translate('language_change_btn'),
+                    languageProvider.translate('language'),
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
